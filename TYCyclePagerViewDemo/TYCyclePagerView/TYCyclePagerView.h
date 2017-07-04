@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "TYCyclePagerTransformLayout.h"
 
+// pagerView scrolling direction
 typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
     TYPagerScrollDirectionLeft,
     TYPagerScrollDirectionRight,
@@ -33,7 +34,6 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 @protocol TYCyclePagerViewDelegate <NSObject>
 
 @optional
-
 
 /**
  pagerView did selected item cell

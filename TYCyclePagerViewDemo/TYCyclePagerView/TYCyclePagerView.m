@@ -43,7 +43,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 @property (nonatomic, strong) NSTimer *timer;
 
 // Data
-@property (nonatomic, assign) TYIndexSection indexSection;
+@property (nonatomic, assign) TYIndexSection indexSection; // current index
 
 @property (nonatomic, assign) NSInteger numberOfItems;
 
@@ -87,7 +87,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     _beginDragIndexSection.section = 0;
     _indexSection.index = -1;
     _indexSection.section = -1;
-    
 }
 
 - (void)addCollectionView {
@@ -226,6 +225,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     [self updateData];
 }
 
+// don't clear layout
 - (void)updateData {
     [self configureLayout];
     [_collectionView reloadData];
@@ -492,11 +492,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
         targetContentOffset->x = [self caculateOffsetXAtIndexSection:_indexSection];
         return;
     }
-    TYPagerScrollDirection direction;
+    TYPagerScrollDirection direction = TYPagerScrollDirectionRight;
     if ((scrollView.contentOffset.x < 0 && targetContentOffset->x <= 0) || (targetContentOffset->x < scrollView.contentOffset.x && scrollView.contentOffset.x < scrollView.contentSize.width - scrollView.frame.size.width)) {
         direction = TYPagerScrollDirectionLeft;
-    }else {
-        direction = TYPagerScrollDirectionRight;
     }
     TYIndexSection indexSection = [self nearlyIndexPathForIndexSection:_indexSection direction:direction];
     targetContentOffset->x = [self caculateOffsetXAtIndexSection:indexSection];
