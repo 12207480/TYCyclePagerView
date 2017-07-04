@@ -14,6 +14,10 @@
 		2B9C0F011F0B2F32009BC0BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B9C0F001F0B2F32009BC0BD /* Assets.xcassets */; };
 		2B9C0F041F0B2F32009BC0BD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B9C0F021F0B2F32009BC0BD /* LaunchScreen.storyboard */; };
 		2B9C0F0F1F0B2F32009BC0BD /* TYCyclePagerViewDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C0F0E1F0B2F32009BC0BD /* TYCyclePagerViewDemoTests.m */; };
+		2B9C0F201F0B2F62009BC0BD /* TYCyclePagerTransformLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C0F1B1F0B2F62009BC0BD /* TYCyclePagerTransformLayout.m */; };
+		2B9C0F211F0B2F62009BC0BD /* TYCyclePagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C0F1D1F0B2F62009BC0BD /* TYCyclePagerView.m */; };
+		2B9C0F221F0B2F62009BC0BD /* TYPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C0F1F1F0B2F62009BC0BD /* TYPageControl.m */; };
+		2B9C0F251F0B2F96009BC0BD /* TYCyclePagerViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B9C0F241F0B2F96009BC0BD /* TYCyclePagerViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +44,14 @@
 		2B9C0F0A1F0B2F32009BC0BD /* TYCyclePagerViewDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TYCyclePagerViewDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B9C0F0E1F0B2F32009BC0BD /* TYCyclePagerViewDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TYCyclePagerViewDemoTests.m; sourceTree = "<group>"; };
 		2B9C0F101F0B2F32009BC0BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B9C0F1A1F0B2F62009BC0BD /* TYCyclePagerTransformLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCyclePagerTransformLayout.h; sourceTree = "<group>"; };
+		2B9C0F1B1F0B2F62009BC0BD /* TYCyclePagerTransformLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCyclePagerTransformLayout.m; sourceTree = "<group>"; };
+		2B9C0F1C1F0B2F62009BC0BD /* TYCyclePagerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCyclePagerView.h; sourceTree = "<group>"; };
+		2B9C0F1D1F0B2F62009BC0BD /* TYCyclePagerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCyclePagerView.m; sourceTree = "<group>"; };
+		2B9C0F1E1F0B2F62009BC0BD /* TYPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPageControl.h; sourceTree = "<group>"; };
+		2B9C0F1F1F0B2F62009BC0BD /* TYPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPageControl.m; sourceTree = "<group>"; };
+		2B9C0F231F0B2F96009BC0BD /* TYCyclePagerViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYCyclePagerViewCell.h; sourceTree = "<group>"; };
+		2B9C0F241F0B2F96009BC0BD /* TYCyclePagerViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYCyclePagerViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,10 +93,13 @@
 		2B9C0EF31F0B2F32009BC0BD /* TYCyclePagerViewDemo */ = {
 			isa = PBXGroup;
 			children = (
+				2B9C0F191F0B2F62009BC0BD /* TYCyclePagerView */,
 				2B9C0EF71F0B2F32009BC0BD /* AppDelegate.h */,
 				2B9C0EF81F0B2F32009BC0BD /* AppDelegate.m */,
 				2B9C0EFA1F0B2F32009BC0BD /* ViewController.h */,
 				2B9C0EFB1F0B2F32009BC0BD /* ViewController.m */,
+				2B9C0F231F0B2F96009BC0BD /* TYCyclePagerViewCell.h */,
+				2B9C0F241F0B2F96009BC0BD /* TYCyclePagerViewCell.m */,
 				2B9C0EFD1F0B2F32009BC0BD /* Main.storyboard */,
 				2B9C0F001F0B2F32009BC0BD /* Assets.xcassets */,
 				2B9C0F021F0B2F32009BC0BD /* LaunchScreen.storyboard */,
@@ -109,6 +124,19 @@
 				2B9C0F101F0B2F32009BC0BD /* Info.plist */,
 			);
 			path = TYCyclePagerViewDemoTests;
+			sourceTree = "<group>";
+		};
+		2B9C0F191F0B2F62009BC0BD /* TYCyclePagerView */ = {
+			isa = PBXGroup;
+			children = (
+				2B9C0F1C1F0B2F62009BC0BD /* TYCyclePagerView.h */,
+				2B9C0F1D1F0B2F62009BC0BD /* TYCyclePagerView.m */,
+				2B9C0F1A1F0B2F62009BC0BD /* TYCyclePagerTransformLayout.h */,
+				2B9C0F1B1F0B2F62009BC0BD /* TYCyclePagerTransformLayout.m */,
+				2B9C0F1E1F0B2F62009BC0BD /* TYPageControl.h */,
+				2B9C0F1F1F0B2F62009BC0BD /* TYPageControl.m */,
+			);
+			path = TYCyclePagerView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,7 +242,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B9C0EFC1F0B2F32009BC0BD /* ViewController.m in Sources */,
+				2B9C0F221F0B2F62009BC0BD /* TYPageControl.m in Sources */,
+				2B9C0F211F0B2F62009BC0BD /* TYCyclePagerView.m in Sources */,
 				2B9C0EF91F0B2F32009BC0BD /* AppDelegate.m in Sources */,
+				2B9C0F251F0B2F96009BC0BD /* TYCyclePagerViewCell.m in Sources */,
+				2B9C0F201F0B2F62009BC0BD /* TYCyclePagerTransformLayout.m in Sources */,
 				2B9C0EF61F0B2F32009BC0BD /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,6 +446,7 @@
 				2B9C0F151F0B2F32009BC0BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2B9C0F161F0B2F32009BC0BD /* Build configuration list for PBXNativeTarget "TYCyclePagerViewDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -422,6 +455,7 @@
 				2B9C0F181F0B2F32009BC0BD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

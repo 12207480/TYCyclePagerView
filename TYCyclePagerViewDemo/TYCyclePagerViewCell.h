@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  TYCyclePagerViewCell.h
 //  TYCyclePagerViewDemo
 //
 //  Created by tany on 2017/6/14.
@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface TYCyclePagerViewCell : UICollectionViewCell
 
 @end
-
