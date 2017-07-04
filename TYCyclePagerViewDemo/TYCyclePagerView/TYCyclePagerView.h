@@ -50,6 +50,8 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  */
 - (void)pagerView:(TYCyclePagerView *)pageView didChangeOldIndex:(NSInteger)oldIndex toNewIndex:(NSInteger)newIndex;
 
+// scrollViewDelegate
+
 - (void)pagerViewDidScroll:(TYCyclePagerView *)pageView;
 
 - (void)pagerViewWillBeginDragging:(TYCyclePagerView *)pageView;
@@ -75,6 +77,7 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 @property (nonatomic, weak) id<TYCyclePagerViewDataSource> dataSource;
 @property (nonatomic, weak) id<TYCyclePagerViewDelegate> delegate;
 
+// pager view layout
 @property (nonatomic, strong, readonly) TYCyclePagerViewLayout *layout;
 
 /**
@@ -92,6 +95,8 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  current page index
  */
 @property (nonatomic, assign, readonly) NSInteger curIndex;
+
+// scrollView property
 @property (nonatomic, assign, readonly) CGPoint contentOffset;
 @property (nonatomic, assign, readonly) BOOL tracking;
 @property (nonatomic, assign, readonly) BOOL dragging;

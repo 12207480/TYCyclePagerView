@@ -23,9 +23,11 @@
 //@property (nonatomic, assign) UIControlContentVerticalAlignment contentVerticalAlignment;     // how to position content vertically inside control. default is center
 //@property (nonatomic, assign) UIControlContentHorizontalAlignment contentHorizontalAlignment; // how to position content hozontally inside control. default is center
 
+// indicatorTint color
 @property (nullable, nonatomic,strong) UIColor *pageIndicatorTintColor;
 @property (nullable, nonatomic,strong) UIColor *currentPageIndicatorTintColor;
 
+// indicator image
 @property (nullable, nonatomic,strong) UIImage *pageIndicatorImage;
 @property (nullable, nonatomic,strong) UIImage *currentPageIndicatorImage;
 

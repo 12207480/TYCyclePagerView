@@ -18,8 +18,10 @@ typedef NS_ENUM(NSUInteger, TYCyclePagerTransformLayoutType) {
 @class TYCyclePagerTransformLayout;
 @protocol TYCyclePagerTransformLayoutDelegate <NSObject>
 
+// initialize layout attributes
 - (void)pagerViewTransformLayout:(TYCyclePagerTransformLayout *)pagerViewTransformLayout initializeTransformAttributes:(UICollectionViewLayoutAttributes *)attributes;
 
+// apply layout attributes
 - (void)pagerViewTransformLayout:(TYCyclePagerTransformLayout *)pagerViewTransformLayout applyTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes;
 
 @end
@@ -33,13 +35,13 @@ typedef NS_ENUM(NSUInteger, TYCyclePagerTransformLayoutType) {
 
 @property (nonatomic, assign) TYCyclePagerTransformLayoutType layoutType;
 
-@property (nonatomic, assign) CGFloat minimumScale;
-@property (nonatomic, assign) CGFloat minimumAlpha;
-@property (nonatomic, assign) CGFloat maximumAngle; // 百分比 0.
+@property (nonatomic, assign) CGFloat minimumScale; // sacle default 0.8
+@property (nonatomic, assign) CGFloat minimumAlpha; // alpha default 1.0
+@property (nonatomic, assign) CGFloat maximumAngle; // angle is % default 0.2
 
 @property (nonatomic, assign) BOOL isInfiniteLoop;  // infinte scroll
 @property (nonatomic, assign) CGFloat rateOfChange; // scale and angle change rate
-@property (nonatomic, assign) BOOL adjustSpacingWhenScroling;
+@property (nonatomic, assign) BOOL adjustSpacingWhenScroling; 
 
 /**
  pageView cell item vertical centering

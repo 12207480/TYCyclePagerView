@@ -132,7 +132,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     }
 }
 
-#pragma mark - getter setter
+#pragma mark - getter
 
 - (TYCyclePagerViewLayout *)layout {
     if (!_layout) {
@@ -171,10 +171,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     return _collectionView.backgroundView;
 }
 
-- (void)setBackgroundView:(UIView *)backgroundView {
-    [_collectionView setBackgroundView:backgroundView];
-}
-
 - (__kindof UICollectionViewCell *)curIndexCell {
     return [_collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:_indexSection.index inSection:_indexSection.section]];
 }
@@ -189,6 +185,12 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
         [indexs addObject:@(indexPath.item)];
     }
     return [indexs copy];
+}
+
+#pragma mark - setter
+
+- (void)setBackgroundView:(UIView *)backgroundView {
+    [_collectionView setBackgroundView:backgroundView];
 }
 
 - (void)setAutoScrollInterval:(CGFloat)autoScrollInterval {
