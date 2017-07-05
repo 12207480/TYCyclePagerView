@@ -248,7 +248,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 - (void)scrollToItemAtIndexSection:(TYIndexSection)indexSection animate:(BOOL)animate {
     if (_numberOfItems == 0 || ![self isVlaidIndexSection:indexSection]) {
-        NSAssert(YES, @"scrollToItemAtIndex: item indexSection is invalid!");
+        NSAssert(NO, @"scrollToItemAtIndex: item indexSection is invalid!");
         return;
     }
     
@@ -430,7 +430,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (_dataSourceFlags.cellForItemAtIndex) {
        return [_dataSource pagerView:self cellForItemAtIndex:indexPath.row];
     }
-    NSAssert(YES, @"pagerView cellForItemAtIndex: is nil!");
+    NSAssert(NO, @"pagerView cellForItemAtIndex: is nil!");
     return nil;
 }
 
