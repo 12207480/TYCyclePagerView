@@ -248,7 +248,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 - (void)scrollToItemAtIndexSection:(TYIndexSection)indexSection animate:(BOOL)animate {
     if (_numberOfItems == 0 || ![self isVlaidIndexSection:indexSection]) {
-        NSAssert(NO, @"scrollToItemAtIndex: item indexSection is invalid!");
+        //NSLog(@"scrollToItemAtIndex: item indexSection is invalid!");
         return;
     }
     
