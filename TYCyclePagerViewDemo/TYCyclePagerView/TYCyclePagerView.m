@@ -227,7 +227,8 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 // don't clear layout
 - (void)updateData {
-    [self configureLayout];
+    [self updateLayout];
+    _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
     [_collectionView reloadData];
     [self resetPagerViewAtIndex:_indexSection.index];
 }
@@ -247,7 +248,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)scrollToItemAtIndexSection:(TYIndexSection)indexSection animate:(BOOL)animate {
-    if (_numberOfItems == 0 || ![self isVlaidIndexSection:indexSection]) {
+    if (_numberOfItems <= 0 || ![self isVlaidIndexSection:indexSection]) {
         //NSLog(@"scrollToItemAtIndex: item indexSection is invalid!");
         return;
     }
@@ -255,12 +256,8 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (animate && [_delegate respondsToSelector:@selector(pagerViewWillBeginScrollingAnimation:)]) {
         [_delegate pagerViewWillBeginScrollingAnimation:self];
     }
-    if (_layout.layoutType == TYCyclePagerTransformLayoutNormal) {
-         [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:indexSection.index inSection:indexSection.section] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:animate];
-    }else {
-        CGFloat offset = [self caculateOffsetXAtIndexSection:indexSection];
-        [_collectionView setContentOffset:CGPointMake(offset, _collectionView.contentOffset.y) animated:animate];
-    }
+    CGFloat offset = [self caculateOffsetXAtIndexSection:indexSection];
+    [_collectionView setContentOffset:CGPointMake(offset, _collectionView.contentOffset.y) animated:animate];
 }
 
 - (void)registerClass:(Class)Class forCellWithReuseIdentifier:(NSString *)identifier {
@@ -277,10 +274,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 #pragma mark - configure layout
-
-- (void)configureLayout {
-    [self updateLayout];
-}
 
 - (void)updateLayout {
     if (!self.layout) {
@@ -359,7 +352,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (TYIndexSection)caculateIndexSectionWithOffsetX:(CGFloat)offsetX {
-    if (_numberOfItems == 0) {
+    if (_numberOfItems <= 0) {
         return TYMakeIndexSection(0, 0);
     }
      UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
@@ -395,6 +388,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)resetPagerViewAtIndex:(NSInteger)index {
+    if (index >= _numberOfItems) {
+        index = 0;
+    }
     [self scrollToItemAtIndexSection:TYMakeIndexSection(index, _isInfiniteLoop ? kPagerViewMaxSectionCount/3 : 0) animate:NO];
     if (!_isInfiniteLoop && _indexSection.index < 0) {
         [self scrollViewDidScroll:_collectionView];
@@ -418,10 +414,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    _numberOfItems = 0;
-    if ([_dataSource respondsToSelector:@selector(numberOfItemsInPagerView:)]) {
-        _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
-    }
+    _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
     return _numberOfItems;
 }
 
@@ -459,7 +452,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     TYIndexSection newIndexSection =  [self caculateIndexSectionWithOffsetX:scrollView.contentOffset.x];
-    if (_numberOfItems == 0 || ![self isVlaidIndexSection:newIndexSection]) {
+    if (_numberOfItems <= 0 || ![self isVlaidIndexSection:newIndexSection]) {
         NSLog(@"inVlaidIndexSection:(%ld,%ld)!",(long)newIndexSection.index,(long)newIndexSection.section);
         return;
     }
