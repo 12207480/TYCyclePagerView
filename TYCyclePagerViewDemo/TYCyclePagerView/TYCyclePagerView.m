@@ -248,7 +248,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)scrollToItemAtIndexSection:(TYIndexSection)indexSection animate:(BOOL)animate {
-    if (_numberOfItems <= 0 || ![self isVlaidIndexSection:indexSection]) {
+    if (_numberOfItems <= 0 || ![self isValidIndexSection:indexSection]) {
         //NSLog(@"scrollToItemAtIndex: item indexSection is invalid!");
         return;
     }
@@ -306,7 +306,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 #pragma mark - pager index
 
-- (BOOL)isVlaidIndexSection:(TYIndexSection)indexSection {
+- (BOOL)isValidIndexSection:(TYIndexSection)indexSection {
     return indexSection.index >= 0 && indexSection.index < _numberOfItems && indexSection.section >= 0 && indexSection.section < kPagerViewMaxSectionCount;
 }
 
@@ -452,7 +452,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     TYIndexSection newIndexSection =  [self caculateIndexSectionWithOffsetX:scrollView.contentOffset.x];
-    if (_numberOfItems <= 0 || ![self isVlaidIndexSection:newIndexSection]) {
+    if (_numberOfItems <= 0 || ![self isValidIndexSection:newIndexSection]) {
         NSLog(@"inVlaidIndexSection:(%ld,%ld)!",(long)newIndexSection.index,(long)newIndexSection.section);
         return;
     }
