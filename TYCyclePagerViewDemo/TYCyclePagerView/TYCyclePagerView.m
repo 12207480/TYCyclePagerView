@@ -388,6 +388,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)resetPagerViewAtIndex:(NSInteger)index {
+    if (index < 0) {
+        return;
+    }
     if (index >= _numberOfItems) {
         index = 0;
     }
@@ -465,7 +468,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     
     if (_delegateFlags.didChangeOldIndexToNewIndex && !TYEqualIndexSection(_indexSection, indexSection)) {
         //NSLog(@"curIndex %ld",(long)_indexSection.index);
-        [_delegate pagerView:self didChangeOldIndex:indexSection.index toNewIndex:_indexSection.index];
+        [_delegate pagerView:self didChangeOldIndex:MAX(indexSection.index, 0) toNewIndex:_indexSection.index];
     }
 }
 

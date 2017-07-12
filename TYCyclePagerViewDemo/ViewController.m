@@ -95,6 +95,7 @@
 - (void)pagerView:(TYCyclePagerView *)pageView didChangeOldIndex:(NSInteger)oldIndex toNewIndex:(NSInteger)newIndex {
     _pageControl.currentPage = newIndex;
     //[_pageControl setCurrentPage:newIndex animate:YES];
+    NSLog(@"%ld ->  %ld",oldIndex,newIndex);
 }
 
 #pragma mark - action
