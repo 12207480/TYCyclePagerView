@@ -158,6 +158,9 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 
 - (void)applyLinearTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes {
     CGFloat collectionViewWidth = self.collectionView.frame.size.width;
+    if (collectionViewWidth <= 0) {
+        return;
+    }
     CGFloat centetX = self.collectionView.contentOffset.x + collectionViewWidth/2;
     CGFloat delta = ABS(attributes.center.x - centetX);
     CGFloat scale = MAX(1 - delta/collectionViewWidth*_layout.rateOfChange, _layout.minimumScale);
@@ -193,6 +196,9 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 
 - (void)applyCoverflowTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes{
     CGFloat collectionViewWidth = self.collectionView.frame.size.width;
+    if (collectionViewWidth <= 0) {
+        return;
+    }
     CGFloat centetX = self.collectionView.contentOffset.x + collectionViewWidth/2;
     CGFloat delta = ABS(attributes.center.x - centetX);
     CGFloat angle = MIN(delta/collectionViewWidth*(1-_layout.rateOfChange), _layout.maximumAngle);

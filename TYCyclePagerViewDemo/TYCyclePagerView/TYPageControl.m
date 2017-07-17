@@ -235,7 +235,9 @@
             break;
         case UIControlContentHorizontalAlignmentFill:
             orignX = _contentInset.left;
-            pageIndicatorSpaing = (CGRectGetWidth(self.frame) - _contentInset.left - _contentInset.right - _pageIndicatorSize.width - (_indicatorViews.count - 1) * _pageIndicatorSize.width)/(_indicatorViews.count - 1);
+            if (_indicatorViews.count > 1) {
+                pageIndicatorSpaing = (CGRectGetWidth(self.frame) - _contentInset.left - _contentInset.right - _pageIndicatorSize.width - (_indicatorViews.count - 1) * _pageIndicatorSize.width)/(_indicatorViews.count - 1);
+            }
             break;
         default:
             break;
