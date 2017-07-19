@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface TYPageControl : UIControl
 
 @property (nonatomic, assign) NSInteger numberOfPages;          // default is 0
@@ -41,3 +43,5 @@
 - (void)setCurrentPage:(NSInteger)currentPage animate:(BOOL)animate;
 
 @end
+
+NS_ASSUME_NONNULL_END

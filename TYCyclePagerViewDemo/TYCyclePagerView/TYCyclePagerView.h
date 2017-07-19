@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "TYCyclePagerTransformLayout.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 // pagerView scrolling direction
 typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
     TYPagerScrollDirectionLeft,
@@ -72,10 +74,10 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 @interface TYCyclePagerView : UIView
 
 // will be automatically resized to track the size of the pagerView
-@property (nonatomic, strong) UIView *backgroundView; 
+@property (nonatomic, strong, nullable) UIView *backgroundView; 
 
-@property (nonatomic, weak) id<TYCyclePagerViewDataSource> dataSource;
-@property (nonatomic, weak) id<TYCyclePagerViewDelegate> delegate;
+@property (nonatomic, weak, nullable) id<TYCyclePagerViewDataSource> dataSource;
+@property (nonatomic, weak, nullable) id<TYCyclePagerViewDelegate> delegate;
 
 // pager view layout
 @property (nonatomic, strong, readonly) TYCyclePagerViewLayout *layout;
@@ -126,12 +128,12 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 /**
  current index cell in pagerView
  */
-- (__kindof UICollectionViewCell *)curIndexCell;
+- (__kindof UICollectionViewCell * _Nullable)curIndexCell;
 
 /**
  visible cells in pageView
  */
-- (NSArray<__kindof UICollectionViewCell *> *)visibleCells;
+- (NSArray<__kindof UICollectionViewCell *> *_Nullable)visibleCells;
 
 
 /**
@@ -166,3 +168,5 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 - (__kindof UICollectionViewCell *)dequeueReusableCellWithReuseIdentifier:(NSString *)identifier forIndex:(NSInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

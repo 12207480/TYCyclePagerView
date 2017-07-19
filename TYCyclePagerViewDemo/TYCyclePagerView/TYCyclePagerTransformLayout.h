@@ -8,13 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSUInteger, TYCyclePagerTransformLayoutType) {
     TYCyclePagerTransformLayoutNormal,
     TYCyclePagerTransformLayoutLinear,
     TYCyclePagerTransformLayoutCoverflow,
 };
-
 
 @class TYCyclePagerTransformLayout;
 @protocol TYCyclePagerTransformLayoutDelegate <NSObject>
@@ -67,6 +67,8 @@ typedef NS_ENUM(NSUInteger, TYCyclePagerTransformLayoutType) {
 
 @property (nonatomic, strong) TYCyclePagerViewLayout *layout;
 
-@property (nonatomic, weak) id<TYCyclePagerTransformLayoutDelegate> delegate;
+@property (nonatomic, weak, nullable) id<TYCyclePagerTransformLayoutDelegate> delegate;
 
 @end
+
+NS_ASSUME_NONNULL_END
