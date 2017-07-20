@@ -33,6 +33,7 @@
 }
 
 - (void)configurePropertys {
+    self.userInteractionEnabled = NO;
     _forceUpdate = NO;
     _animateDuring = 0.3;
     _pageIndicatorSpaing = 10;

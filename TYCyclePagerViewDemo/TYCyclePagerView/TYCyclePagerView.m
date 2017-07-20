@@ -27,7 +27,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 @interface TYCyclePagerView () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, TYCyclePagerTransformLayoutDelegate> {
     struct {
         unsigned int pagerViewDidScroll   :1;
-        unsigned int didChangeOldIndexToNewIndex   :1;
+        unsigned int didScrollFromIndexToNewIndex   :1;
         unsigned int initializeTransformAttributes   :1;
         unsigned int applyTransformToAttributes   :1;
     }_delegateFlags;
@@ -203,7 +203,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 - (void)setDelegate:(id<TYCyclePagerViewDelegate>)delegate {
     _delegate = delegate;
     _delegateFlags.pagerViewDidScroll = [delegate respondsToSelector:@selector(scrollViewDidScroll:)];
-    _delegateFlags.didChangeOldIndexToNewIndex = [delegate respondsToSelector:@selector(pagerView:didChangeOldIndex:toNewIndex:)];
+    _delegateFlags.didScrollFromIndexToNewIndex = [delegate respondsToSelector:@selector(pagerView:didScrollFromIndex:toIndex:)];
     _delegateFlags.initializeTransformAttributes = [delegate respondsToSelector:@selector(pagerView:initializeTransformAttributes:)];
     _delegateFlags.applyTransformToAttributes = [delegate respondsToSelector:@selector(pagerView:applyTransformToAttributes:)];
     if (self.collectionView && self.collectionView.collectionViewLayout) {
@@ -466,9 +466,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
         [_delegate pagerViewDidScroll:self];
     }
     
-    if (_delegateFlags.didChangeOldIndexToNewIndex && !TYEqualIndexSection(_indexSection, indexSection)) {
+    if (_delegateFlags.didScrollFromIndexToNewIndex && !TYEqualIndexSection(_indexSection, indexSection)) {
         //NSLog(@"curIndex %ld",(long)_indexSection.index);
-        [_delegate pagerView:self didChangeOldIndex:MAX(indexSection.index, 0) toNewIndex:_indexSection.index];
+        [_delegate pagerView:self didScrollFromIndex:MAX(indexSection.index, 0) toIndex:_indexSection.index];
     }
 }
 

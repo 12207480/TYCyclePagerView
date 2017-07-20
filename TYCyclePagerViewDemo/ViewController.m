@@ -45,7 +45,6 @@
 
 - (void)addPageControl {
     TYPageControl *pageControl = [[TYPageControl alloc]init];
-    pageControl.userInteractionEnabled = NO;
     //pageControl.numberOfPages = _datas.count;
     pageControl.currentPageIndicatorSize = CGSizeMake(8, 8);
 //    pageControl.pageIndicatorImage = [UIImage imageNamed:@"Dot"];
@@ -99,10 +98,10 @@
     return layout;
 }
 
-- (void)pagerView:(TYCyclePagerView *)pageView didChangeOldIndex:(NSInteger)oldIndex toNewIndex:(NSInteger)newIndex {
-    _pageControl.currentPage = newIndex;
+- (void)pagerView:(TYCyclePagerView *)pageView didScrollFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex {
+    _pageControl.currentPage = toIndex;
     //[_pageControl setCurrentPage:newIndex animate:YES];
-    NSLog(@"%ld ->  %ld",oldIndex,newIndex);
+    NSLog(@"%ld ->  %ld",fromIndex,toIndex);
 }
 
 #pragma mark - action

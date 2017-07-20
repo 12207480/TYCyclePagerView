@@ -50,7 +50,7 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 /**
  pagerView did scroll to new index page
  */
-- (void)pagerView:(TYCyclePagerView *)pageView didChangeOldIndex:(NSInteger)oldIndex toNewIndex:(NSInteger)newIndex;
+- (void)pagerView:(TYCyclePagerView *)pageView didScrollFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
 // scrollViewDelegate
 

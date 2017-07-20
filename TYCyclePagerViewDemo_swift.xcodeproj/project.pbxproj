@@ -15,6 +15,7 @@
 		2BE688861F204606001FE46D /* TYCyclePagerTransformLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BE688811F204606001FE46D /* TYCyclePagerTransformLayout.m */; };
 		2BE688871F204606001FE46D /* TYCyclePagerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BE688831F204606001FE46D /* TYCyclePagerView.m */; };
 		2BE688881F204606001FE46D /* TYPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BE688851F204606001FE46D /* TYPageControl.m */; };
+		2BE688911F204A64001FE46D /* TYCyclePagerViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE688901F204A64001FE46D /* TYCyclePagerViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		2BE688841F204606001FE46D /* TYPageControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TYPageControl.h; sourceTree = "<group>"; };
 		2BE688851F204606001FE46D /* TYPageControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TYPageControl.m; sourceTree = "<group>"; };
 		2BE6888F1F204681001FE46D /* TYCyclePagerViewDemo_swift-Brdging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TYCyclePagerViewDemo_swift-Brdging-Header.h"; sourceTree = "<group>"; };
+		2BE688901F204A64001FE46D /* TYCyclePagerViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TYCyclePagerViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				2BE6887F1F204606001FE46D /* TYCyclePagerView */,
 				2BE6886D1F2045D1001FE46D /* AppDelegate.swift */,
 				2BE6886F1F2045D1001FE46D /* ViewController.swift */,
+				2BE688901F204A64001FE46D /* TYCyclePagerViewCell.swift */,
 				2BE6888F1F204681001FE46D /* TYCyclePagerViewDemo_swift-Brdging-Header.h */,
 				2BE688711F2045D1001FE46D /* Main.storyboard */,
 				2BE688741F2045D1001FE46D /* Assets.xcassets */,
@@ -163,6 +166,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2BE688911F204A64001FE46D /* TYCyclePagerViewCell.swift in Sources */,
 				2BE688881F204606001FE46D /* TYPageControl.m in Sources */,
 				2BE688871F204606001FE46D /* TYCyclePagerView.m in Sources */,
 				2BE688701F2045D1001FE46D /* ViewController.swift in Sources */,
