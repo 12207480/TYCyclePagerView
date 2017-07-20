@@ -24,17 +24,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    NSMutableArray *datas = [NSMutableArray array];
-    for (int i = 0; i < 5; ++i) {
-        if (i == 0) {
-            [datas addObject:[UIColor redColor]];
-            continue;
-        }
-        [datas addObject:[UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:arc4random()%255/255.0]];
-    }
-    _datas = [datas copy];
     [self addPagerView];
     [self addPageControl];
+    
+    [self loadData];
 }
 
 - (void)addPagerView {
@@ -48,13 +41,12 @@
     [pagerView registerClass:[TYCyclePagerViewCell class] forCellWithReuseIdentifier:@"cellId"];
     [self.view addSubview:pagerView];
     _pagerView = pagerView;
-    [pagerView reloadData];
 }
 
 - (void)addPageControl {
     TYPageControl *pageControl = [[TYPageControl alloc]init];
     pageControl.userInteractionEnabled = NO;
-    pageControl.numberOfPages = _datas.count;
+    //pageControl.numberOfPages = _datas.count;
     pageControl.currentPageIndicatorSize = CGSizeMake(8, 8);
 //    pageControl.pageIndicatorImage = [UIImage imageNamed:@"Dot"];
 //    pageControl.currentPageIndicatorImage = [UIImage imageNamed:@"DotSelected"];
@@ -72,6 +64,20 @@
     _pageControl.frame = CGRectMake(0, CGRectGetHeight(_pagerView.frame) - 26, CGRectGetWidth(_pagerView.frame), 26);
 }
 
+- (void)loadData {
+    NSMutableArray *datas = [NSMutableArray array];
+    for (int i = 0; i < 5; ++i) {
+        if (i == 0) {
+            [datas addObject:[UIColor redColor]];
+            continue;
+        }
+        [datas addObject:[UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:arc4random()%255/255.0]];
+    }
+    _datas = [datas copy];
+    _pageControl.numberOfPages = _datas.count;
+    [_pagerView reloadData];
+}
+
 #pragma mark - TYCyclePagerViewDataSource
 
 - (NSInteger)numberOfItemsInPagerView:(TYCyclePagerView *)pageView {
@@ -81,6 +87,7 @@
 - (UICollectionViewCell *)pagerView:(TYCyclePagerView *)pagerView cellForItemAtIndex:(NSInteger)index {
     TYCyclePagerViewCell *cell = [pagerView dequeueReusableCellWithReuseIdentifier:@"cellId" forIndex:index];
     cell.backgroundColor = _datas[index];
+    cell.label.text = [NSString stringWithFormat:@"index->%ld",index];
     return cell;
 }
 
