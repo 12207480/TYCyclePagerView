@@ -38,19 +38,20 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 @optional
 
 /**
+ pagerView did scroll to new index page
+ */
+- (void)pagerView:(TYCyclePagerView *)pageView didScrollFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
+
+/**
  pagerView did selected item cell
  */
 - (void)pagerView:(TYCyclePagerView *)pageView didSelectedItemCell:(__kindof UICollectionViewCell *)cell atIndex:(NSInteger)index;
 
-// layout
+// custom layout
 - (void)pagerView:(TYCyclePagerView *)pageView initializeTransformAttributes:(UICollectionViewLayoutAttributes *)attributes;
 
 - (void)pagerView:(TYCyclePagerView *)pageView applyTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes;
 
-/**
- pagerView did scroll to new index page
- */
-- (void)pagerView:(TYCyclePagerView *)pageView didScrollFromIndex:(NSInteger)fromIndex toIndex:(NSInteger)toIndex;
 
 // scrollViewDelegate
 
