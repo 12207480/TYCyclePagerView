@@ -59,7 +59,7 @@
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    _pagerView.frame = CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 180);
+    _pagerView.frame = CGRectMake(0, 64, CGRectGetWidth(self.view.frame), 200);
     _pageControl.frame = CGRectMake(0, CGRectGetHeight(_pagerView.frame) - 26, CGRectGetWidth(_pagerView.frame), 26);
 }
 

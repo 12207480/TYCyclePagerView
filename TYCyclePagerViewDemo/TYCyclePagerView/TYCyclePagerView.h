@@ -121,7 +121,7 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 - (void)setNeedUpdateLayout;
 
 /**
- will set layout nil and call delegate
+ will set layout nil and call delegate->layoutForPagerView
  */
 - (void)setNeedClearLayout;
 
@@ -160,7 +160,6 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  register pager view cell with nib
  */
 - (void)registerNib:(UINib *)nib forCellWithReuseIdentifier:(NSString *)identifier;
-
 
 /**
  dequeue reusable cell for pagerView

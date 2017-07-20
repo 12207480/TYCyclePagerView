@@ -30,9 +30,12 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.addPagerView()
         self.addPageControl()
+        
+        self.loadData()
     }
     
     func addPagerView() {
+        self.pagerView.layer.borderWidth = 1;
         self.pagerView.dataSource = self
         self.pagerView.delegate = self
         self.pagerView.register(TYCyclePagerViewCell.classForCoder(), forCellWithReuseIdentifier: "cellId")
@@ -41,6 +44,12 @@ class ViewController: UIViewController {
     
     func addPageControl() {
         self.pagerView.addSubview(self.pageControl)
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        self.pagerView.frame = CGRect(x: 0, y: 64, width: self.view.frame.width, height: 200)
+        self.pageControl.frame = CGRect(x: 0, y: self.pagerView.frame.height - 26, width: self.pagerView.frame.width, height: 26)
     }
     
     func loadData() {
@@ -57,9 +66,53 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    // MARK: Action
+    
+    @IBAction func switchValueChangeAction(_ sender: UISwitch) {
+        switch sender.tag {
+        case 0:
+            self.pagerView.isInfiniteLoop = sender.isOn
+            self.pagerView.updateData()
+        case 1:
+            self.pagerView.autoScrollInterval = sender.isOn ? 3.0 : 0
+        case 2:
+            self.pagerView.layout.itemHorizontalCenter = sender.isOn
+            UIView.animate(withDuration: 0.3, animations: { 
+                self.pagerView.setNeedUpdateLayout()
+            })
+        default:
+            break
+        }
+    }
+    
+    @IBAction func sliderValueChangeAction(_ sender: UISlider) {
+        switch sender.tag {
+        case 0:
+            self.pagerView.layout.itemSize = CGSize(width: self.pagerView.frame.width*CGFloat(sender.value), height: self.pagerView.frame.height*CGFloat(sender.value))
+            self.pagerView.setNeedUpdateLayout();
+        case 1:
+            self.pagerView.layout.itemSpacing = CGFloat(30*sender.value)
+            self.pagerView.setNeedUpdateLayout();
+        case 2:
+            self.pageControl.pageIndicatorSize = CGSize(width: CGFloat(6*(1+sender.value)), height: CGFloat(6*(1+sender.value)))
+            self.pageControl.currentPageIndicatorSize = CGSize(width: CGFloat(8*(1+sender.value)), height: CGFloat(8*(1+sender.value)))
+            self.pageControl.pageIndicatorSpaing = CGFloat(1+sender.value)*10;
+        default:
+            break;
+        }
+    }
+    
+    @IBAction func buttonAction(_ sender: UIButton) {
+        self.pagerView.layout.layoutType = TYCyclePagerTransformLayoutType(rawValue: UInt(sender.tag))!
+        self.pagerView.setNeedUpdateLayout()
+    }
 }
 
 extension ViewController: TYCyclePagerViewDelegate, TYCyclePagerViewDataSource {
+    
+    // MARK: TYCyclePagerViewDataSource
+    
     func numberOfItems(in pageView: TYCyclePagerView) -> Int {
         return self.datas.count
     }
