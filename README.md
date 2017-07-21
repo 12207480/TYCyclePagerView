@@ -1,5 +1,5 @@
 # TYCyclePagerView
-a simple and usefull cycle pager view ,and auto scroll banner view for iOS,support Objective-C and swift.
+a simple and usefull cycle pager view ,and auto scroll banner view ,include pageControl for iOS,support Objective-C and swift
 
 ## Requirements
 * Xcode 7 or higher
@@ -68,6 +68,32 @@ a simple and usefull cycle pager view ,and auto scroll banner view for iOS,suppo
  */
 @property (nonatomic, assign) CGFloat autoScrollInterval;
 
+
+@interface TYCyclePagerViewLayout : NSObject
+
+@property (nonatomic, assign) CGSize itemSize;
+@property (nonatomic, assign) CGFloat itemSpacing;
+@property (nonatomic, assign) UIEdgeInsets sectionInset;
+
+@property (nonatomic, assign) TYCyclePagerTransformLayoutType layoutType;
+
+@property (nonatomic, assign) CGFloat minimumScale; // sacle default 0.8
+@property (nonatomic, assign) CGFloat minimumAlpha; // alpha default 1.0
+@property (nonatomic, assign) CGFloat maximumAngle; // angle is % default 0.2
+
+
+@interface TYPageControl : UIControl
+
+@property (nonatomic, assign) NSInteger numberOfPages;          // default is 0
+@property (nonatomic, assign) NSInteger currentPage;            // default is 0. value pinned to 0..numberOfPages-1
+
+// indicatorTint color
+@property (nullable, nonatomic,strong) UIColor *pageIndicatorTintColor;
+@property (nullable, nonatomic,strong) UIColor *currentPageIndicatorTintColor;
+
+// indicator image
+@property (nullable, nonatomic,strong) UIImage *pageIndicatorImage;
+@property (nullable, nonatomic,strong) UIImage *currentPageIndicatorImage;
 ```
 
 ## Usage
