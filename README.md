@@ -74,6 +74,34 @@ a simple and usefull cycle pager view ,and auto scroll banner view for iOS,suppo
 
 ```objc
 
+- (void)addPagerView {
+    TYCyclePagerView *pagerView = [[TYCyclePagerView alloc]init];
+    pagerView.layer.borderWidth = 1;
+    pagerView.isInfiniteLoop = YES;
+    pagerView.autoScrollInterval = 3.0;
+    pagerView.dataSource = self;
+    pagerView.delegate = self;
+    // registerClass or registerNib
+    [pagerView registerClass:[TYCyclePagerViewCell class] forCellWithReuseIdentifier:@"cellId"];
+    [self.view addSubview:pagerView];
+    _pagerView = pagerView;
+}
+
+- (void)addPageControl {
+    TYPageControl *pageControl = [[TYPageControl alloc]init];
+    //pageControl.numberOfPages = _datas.count;
+    pageControl.currentPageIndicatorSize = CGSizeMake(8, 8);
+//    pageControl.pageIndicatorImage = [UIImage imageNamed:@"Dot"];
+//    pageControl.currentPageIndicatorImage = [UIImage imageNamed:@"DotSelected"];
+//    [pageControl addTarget:self action:@selector(pageControlValueChangeAction:) forControlEvents:UIControlEventValueChanged];
+    [_pagerView addSubview:pageControl];
+    _pageControl = pageControl;
+}
+- (void)loadData {
+    // load Data to _datats
+    _pageControl.numberOfPages = _datas.count;
+    [_pagerView reloadData];
+}
 
 ```
 
