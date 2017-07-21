@@ -24,8 +24,6 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 
 - (__kindof UICollectionViewCell *)pagerView:(TYCyclePagerView *)pagerView cellForItemAtIndex:(NSInteger)index;
 
-@optional
-
 /**
  return pagerView layout,and cache layout
  */
@@ -87,7 +85,6 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  is infinite cycle pageview
  */
 @property (nonatomic, assign) BOOL isInfiniteLoop;
-
 
 /**
  pagerView automatic scroll time interval, default 0,disable automatic
