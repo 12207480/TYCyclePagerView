@@ -43,7 +43,7 @@ a simple and usefull cycle pager view ,and auto scroll banner view ,include page
 // More API see project
 ```
 
-* Properties
+* Class
 
 ```objc
 
