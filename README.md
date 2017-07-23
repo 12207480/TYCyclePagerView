@@ -13,7 +13,7 @@ a simple and usefull cycle pager view ,and auto scroll banner view ,include page
 
 ## API
 
-*  DataSorce and Delegate 
+*  DataSource and Delegate 
 ```objc
 
 @protocol TYCyclePagerViewDataSource <NSObject>
