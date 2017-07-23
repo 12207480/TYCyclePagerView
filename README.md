@@ -125,7 +125,7 @@ a simple and usefull cycle pager view ,and auto scroll banner view ,include page
     _pageControl = pageControl;
 }
 - (void)loadData {
-    // load Data to _datats
+    // load data to _datas
     _pageControl.numberOfPages = _datas.count;
     [_pagerView reloadData];
 }
