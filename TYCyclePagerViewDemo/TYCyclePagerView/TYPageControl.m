@@ -9,14 +9,17 @@
 #import "TYPageControl.h"
 
 @interface TYPageControl ()
-
+// UI
 @property (nonatomic, strong) NSArray<UIImageView *> *indicatorViews;
 
+// Data
 @property (nonatomic, assign) BOOL forceUpdate;
 
 @end
 
 @implementation TYPageControl
+
+#pragma mark - life cycle
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {

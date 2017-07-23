@@ -43,12 +43,10 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 @property (nonatomic, strong) NSTimer *timer;
 
 // Data
-@property (nonatomic, assign) TYIndexSection indexSection; // current index
-
 @property (nonatomic, assign) NSInteger numberOfItems;
 
+@property (nonatomic, assign) TYIndexSection indexSection; // current index
 @property (nonatomic, assign) NSInteger dequeueSection;
-
 @property (nonatomic, assign) TYIndexSection beginDragIndexSection;
 
 @property (nonatomic, assign) BOOL needClearLayout;
@@ -107,6 +105,16 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     _collectionView = collectionView;
 }
 
+- (void)willMoveToSuperview:(UIView *)newSuperview {
+    if (!newSuperview) {
+        [self removeTimer];
+    }else {
+        [self addTimer];
+    }
+}
+
+#pragma mark - timer
+
 - (void)addTimer {
     if (_timer) {
         return;
@@ -123,12 +131,12 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     _timer = nil;
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    if (!newSuperview) {
-        [self removeTimer];
-    }else {
-        [self addTimer];
+- (void)timerFired:(NSTimer *)timer {
+    if (!self.superview || !self.window || _numberOfItems == 0 || self.tracking) {
+        return;
     }
+    
+    [self scrollToNearlyIndexAtDirection:TYPagerScrollDirectionRight animate:YES];
 }
 
 #pragma mark - getter
@@ -225,7 +233,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     [self updateData];
 }
 
-// don't clear layout
+// not clear layout
 - (void)updateData {
     [self updateLayout];
     _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
@@ -537,16 +545,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (_delegateFlags.applyTransformToAttributes) {
         [_delegate pagerView:self applyTransformToAttributes:attributes];
     }
-}
-
-#pragma mark - timer 
-
-- (void)timerFired:(NSTimer *)timer {
-    if (!self.superview || !self.window || _numberOfItems == 0 || self.tracking) {
-        return;
-    }
-    
-    [self scrollToNearlyIndexAtDirection:TYPagerScrollDirectionRight animate:YES];
 }
 
 - (void)layoutSubviews {

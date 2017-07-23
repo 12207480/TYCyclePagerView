@@ -251,6 +251,8 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
     return self;
 }
 
+#pragma mark - getter
+
 - (UIEdgeInsets)onlyOneSectionInset {
     CGFloat leftSpace = _pageView && !_isInfiniteLoop && _itemHorizontalCenter ? (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2 : _sectionInset.left;
     CGFloat rightSpace = _pageView && !_isInfiniteLoop && _itemHorizontalCenter ? (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2 : _sectionInset.right;
