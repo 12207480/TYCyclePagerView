@@ -109,7 +109,10 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (!newSuperview) {
         [self removeTimer];
     }else {
-        [self addTimer];
+        [self removeTimer];
+        if (_autoScrollInterval > 0) {
+            [self addTimer];
+        }
     }
 }
 
