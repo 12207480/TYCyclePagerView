@@ -1,5 +1,5 @@
 # TYCyclePagerView
-a simple and usefull cycle pager view ,and auto scroll banner view ,include pageControl for iOS,support Objective-C and swift.
+a simple and usefull cycle pager view ,and auto scroll banner view ,include pageControl for iOS,support Objective-C and swift.this has been used in APP.
 
 ## Requirements
 * Xcode 7 or higher
