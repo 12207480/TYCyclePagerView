@@ -77,6 +77,22 @@
     [_pagerView reloadData];
 }
 
+//- (void)loadData {
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        NSMutableArray *datas = [NSMutableArray array];
+//        for (int i = 0; i < 5; ++i) {
+//            if (i == 0) {
+//                [datas addObject:[UIColor redColor]];
+//                continue;
+//            }
+//            [datas addObject:[UIColor colorWithRed:arc4random()%255/255.0 green:arc4random()%255/255.0 blue:arc4random()%255/255.0 alpha:arc4random()%255/255.0]];
+//        }
+//        _datas = [datas copy];
+//        _pageControl.numberOfPages = _datas.count;
+//        [_pagerView reloadData];
+//    });
+//}
+
 #pragma mark - TYCyclePagerViewDataSource
 
 - (NSInteger)numberOfItemsInPagerView:(TYCyclePagerView *)pageView {
@@ -92,7 +108,7 @@
 
 - (TYCyclePagerViewLayout *)layoutForPagerView:(TYCyclePagerView *)pageView {
     TYCyclePagerViewLayout *layout = [[TYCyclePagerViewLayout alloc]init];
-    layout.itemSize = CGSizeMake(CGRectGetWidth(pageView.frame), CGRectGetHeight(pageView.frame));
+    layout.itemSize = CGSizeMake(CGRectGetWidth(pageView.frame)*0.8, CGRectGetHeight(pageView.frame)*0.8);
     layout.itemSpacing = 15;
     layout.itemHorizontalCenter = YES;
     return layout;

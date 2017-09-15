@@ -50,6 +50,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 @property (nonatomic, assign) TYIndexSection beginDragIndexSection;
 
 @property (nonatomic, assign) BOOL needClearLayout;
+@property (nonatomic, assign) BOOL didReloadData;
 
 @end
 
@@ -79,6 +80,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)configureProperty {
+    _didReloadData = NO;
     _autoScrollInterval = 0;
     _isInfiniteLoop = YES;
     _beginDragIndexSection.index = 0;
@@ -231,6 +233,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 #pragma mark - public
 
 - (void)reloadData {
+    _didReloadData = YES;
     [self setNeedClearLayout];
     [self clearLayout];
     [self updateData];
@@ -241,7 +244,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     [self updateLayout];
     _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
     [_collectionView reloadData];
-    [self resetPagerViewAtIndex:_indexSection.index];
+    [self resetPagerViewAtIndex:_indexSection.index < 0 && !CGRectIsEmpty(self.frame) ? 0 :_indexSection.index];
 }
 
 - (void)scrollToNearlyIndexAtDirection:(TYPagerScrollDirection)direction animate:(BOOL)animate {
@@ -554,7 +557,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     [super layoutSubviews];
     BOOL needUpdateLayout = !CGRectEqualToRect(_collectionView.frame, self.bounds);
     _collectionView.frame = self.bounds;
-    if (_indexSection.section < 0 || needUpdateLayout) {
+    if ((_indexSection.section < 0 || needUpdateLayout) && (_numberOfItems > 0 || _didReloadData)) {
         [self setNeedUpdateLayout];
     }
 }
