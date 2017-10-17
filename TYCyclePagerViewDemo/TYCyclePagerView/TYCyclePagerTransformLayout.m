@@ -97,8 +97,8 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 }
 
 - (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSArray *attributesArray = [[NSArray alloc] initWithArray:[super layoutAttributesForElementsInRect:rect] copyItems:YES];
     if (_delegateFlags.applyTransformToAttributes || _layout.layoutType != TYCyclePagerTransformLayoutNormal) {
+        NSArray *attributesArray = [[NSArray alloc] initWithArray:[super layoutAttributesForElementsInRect:rect] copyItems:YES];
         CGRect visibleRect = {self.collectionView.contentOffset,self.collectionView.bounds.size};
         for (UICollectionViewLayoutAttributes *attributes in attributesArray) {
             if (!CGRectIntersectsRect(visibleRect, attributes.frame)) {
@@ -110,8 +110,9 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
                 [self applyTransformToAttributes:attributes layoutType:_layout.layoutType];
             }
         }
+        return attributesArray;
     }
-    return attributesArray;
+    return [super layoutAttributesForElementsInRect:rect];
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath {
