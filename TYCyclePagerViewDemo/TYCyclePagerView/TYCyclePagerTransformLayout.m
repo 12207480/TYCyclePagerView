@@ -36,6 +36,20 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 
 @implementation TYCyclePagerTransformLayout
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    }
+    return self;
+}
+
 #pragma mark - getter setter
 
 - (void)setDelegate:(id<TYCyclePagerTransformLayoutDelegate>)delegate {
@@ -85,11 +99,6 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 }
 
 #pragma mark - layout
-
-- (void)prepareLayout {
-    self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    [super prepareLayout];
-}
 
 -(BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds
 {

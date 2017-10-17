@@ -51,6 +51,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 @property (nonatomic, assign) BOOL needClearLayout;
 @property (nonatomic, assign) BOOL didReloadData;
+@property (nonatomic, assign) BOOL didLayout;
 
 @end
 
@@ -81,6 +82,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 - (void)configureProperty {
     _didReloadData = NO;
+    _didLayout = NO;
     _autoScrollInterval = 0;
     _isInfiniteLoop = YES;
     _beginDragIndexSection.index = 0;
@@ -420,7 +422,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     }
     if (_indexSection.section > kPagerViewMaxSectionCount - kPagerViewMinSectionCount || _indexSection.section < kPagerViewMinSectionCount) {
         [self resetPagerViewAtIndex:_indexSection.index];
-        //NSLog(@"recyclePagerViewIfNeed");
     }
 }
 
@@ -468,6 +469,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (!_didLayout) {
+        return;
+    }
     TYIndexSection newIndexSection =  [self caculateIndexSectionWithOffsetX:scrollView.contentOffset.x];
     if (_numberOfItems <= 0 || ![self isValidIndexSection:newIndexSection]) {
         NSLog(@"inVlaidIndexSection:(%ld,%ld)!",(long)newIndexSection.index,(long)newIndexSection.section);
@@ -497,7 +501,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    //NSLog(@"scrollViewWillEndDragging %lf %lf",scrollView.contentOffset.x,targetContentOffset->x);
     if (fabs(velocity.x) < 0.35 || !TYEqualIndexSection(_beginDragIndexSection, _indexSection)) {
         targetContentOffset->x = [self caculateOffsetXAtIndexSection:_indexSection];
         return;
@@ -558,6 +561,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     BOOL needUpdateLayout = !CGRectEqualToRect(_collectionView.frame, self.bounds);
     _collectionView.frame = self.bounds;
     if ((_indexSection.section < 0 || needUpdateLayout) && (_numberOfItems > 0 || _didReloadData)) {
+        _didLayout = YES;
         [self setNeedUpdateLayout];
     }
 }

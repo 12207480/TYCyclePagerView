@@ -24,6 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.title = @"TYCyclePagerView";
     [self addPagerView];
     [self addPageControl];
     
@@ -65,7 +66,7 @@
 
 - (void)loadData {
     NSMutableArray *datas = [NSMutableArray array];
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 7; ++i) {
         if (i == 0) {
             [datas addObject:[UIColor redColor]];
             continue;
