@@ -72,14 +72,14 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 
 @interface TYCyclePagerView : UIView
 
-// pager view, don't set dataSource , delegate
-@property (nonatomic, weak, readonly) UICollectionView *collectionView;
 // will be automatically resized to track the size of the pagerView
 @property (nonatomic, strong, nullable) UIView *backgroundView; 
 
 @property (nonatomic, weak, nullable) id<TYCyclePagerViewDataSource> dataSource;
 @property (nonatomic, weak, nullable) id<TYCyclePagerViewDelegate> delegate;
 
+// pager view, don't set dataSource and delegate
+@property (nonatomic, weak, readonly) UICollectionView *collectionView;
 // pager view layout
 @property (nonatomic, strong, readonly) TYCyclePagerViewLayout *layout;
 
