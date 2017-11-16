@@ -7,7 +7,7 @@ pod 'TYCyclePagerView'
 ```
 
 ## Requirements
-* Xcode 7 or higher
+* Xcode 8 or higher
 * iOS 7.0 or higher
 * ARC
 
