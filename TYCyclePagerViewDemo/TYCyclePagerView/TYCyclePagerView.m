@@ -246,6 +246,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     [self updateLayout];
     _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
     [_collectionView reloadData];
+    if (!_didLayout && !CGRectIsEmpty(self.frame) && _indexSection.index < 0) {
+        _didLayout = YES;
+    }
     [self resetPagerViewAtIndex:_indexSection.index < 0 && !CGRectIsEmpty(self.frame) ? 0 :_indexSection.index];
 }
 
