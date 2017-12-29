@@ -76,6 +76,7 @@
     _datas = [datas copy];
     _pageControl.numberOfPages = _datas.count;
     [_pagerView reloadData];
+    //[_pagerView scrollToItemAtIndex:3 animate:YES];
 }
 
 //- (void)loadData {

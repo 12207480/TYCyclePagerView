@@ -48,10 +48,13 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 @property (nonatomic, assign) TYIndexSection indexSection; // current index
 @property (nonatomic, assign) NSInteger dequeueSection;
 @property (nonatomic, assign) TYIndexSection beginDragIndexSection;
+@property (nonatomic, assign) NSInteger firstScrollIndex;
 
 @property (nonatomic, assign) BOOL needClearLayout;
 @property (nonatomic, assign) BOOL didReloadData;
 @property (nonatomic, assign) BOOL didLayout;
+
+
 
 @end
 
@@ -89,6 +92,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     _beginDragIndexSection.section = 0;
     _indexSection.index = -1;
     _indexSection.section = -1;
+    _firstScrollIndex = -1;
 }
 
 - (void)addCollectionView {
@@ -258,6 +262,11 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)scrollToItemAtIndex:(NSInteger)index animate:(BOOL)animate {
+    if (!_didLayout && _didReloadData) {
+        _firstScrollIndex = index;
+    }else {
+        _firstScrollIndex = -1;
+    }
     if (!_isInfiniteLoop) {
         [self scrollToItemAtIndexSection:TYMakeIndexSection(index, 0) animate:animate];
         return;
@@ -407,6 +416,10 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)resetPagerViewAtIndex:(NSInteger)index {
+    if (_didLayout && _firstScrollIndex >= 0) {
+        index = _firstScrollIndex;
+        _firstScrollIndex = -1;
+    }
     if (index < 0) {
         return;
     }
