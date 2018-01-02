@@ -272,7 +272,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
         return;
     }
 
-    [self scrollToItemAtIndexSection:TYMakeIndexSection(index, index >= self.curIndex ? _indexSection.section : _indexSection.section+1) animate:YES];
+    [self scrollToItemAtIndexSection:TYMakeIndexSection(index, index >= self.curIndex ? _indexSection.section : _indexSection.section+1) animate:animate];
 }
 
 - (void)scrollToItemAtIndexSection:(TYIndexSection)indexSection animate:(BOOL)animate {
