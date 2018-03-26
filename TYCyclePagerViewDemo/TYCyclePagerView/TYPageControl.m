@@ -202,6 +202,7 @@
     if (_hidesForSinglePage && _indicatorViews.count == 1) {
         UIImageView *indicatorView = _indicatorViews.lastObject;
         indicatorView.hidden = YES;
+        return;
     }
     NSInteger index = 0;
     for (UIImageView *indicatorView in _indicatorViews) {
