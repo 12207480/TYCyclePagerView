@@ -17,6 +17,7 @@
 @property (nonatomic, strong) TYPageControl *pageControl;
 @property (nonatomic, strong) NSArray *datas;
 
+@property (weak, nonatomic) IBOutlet UISwitch *horCenterSwitch;
 @end
 
 @implementation ViewController
@@ -113,7 +114,7 @@
     layout.itemSize = CGSizeMake(CGRectGetWidth(pageView.frame)*0.8, CGRectGetHeight(pageView.frame)*0.8);
     layout.itemSpacing = 15;
     //layout.minimumAlpha = 0.3;
-    layout.itemHorizontalCenter = YES;
+    layout.itemHorizontalCenter = _horCenterSwitch.isOn;
     return layout;
 }
 
