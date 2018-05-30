@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 # 名称 使用的时候pod search [name]
 s.name = "TYCyclePagerView"
 # 代码库的版本
-s.version = "1.1.0"
+s.version = "1.1.1"
 # 简介
 s.summary = "a simple and usefull cycle pager view ,and auto scroll banner view,include pageControl for iOS,support Objective-C and swift"
 # 主页
