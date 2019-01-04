@@ -11,6 +11,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef struct {
+    NSInteger index;
+    NSInteger section;
+}TYIndexSection;
+
 // pagerView scrolling direction
 typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
     TYPagerScrollDirectionLeft,
@@ -44,6 +49,7 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  pagerView did selected item cell
  */
 - (void)pagerView:(TYCyclePagerView *)pageView didSelectedItemCell:(__kindof UICollectionViewCell *)cell atIndex:(NSInteger)index;
+- (void)pagerView:(TYCyclePagerView *)pageView didSelectedItemCell:(__kindof UICollectionViewCell *)cell atIndexSection:(TYIndexSection)indexSection;
 
 // custom layout
 - (void)pagerView:(TYCyclePagerView *)pageView initializeTransformAttributes:(UICollectionViewLayoutAttributes *)attributes;
@@ -93,10 +99,13 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  */
 @property (nonatomic, assign) CGFloat autoScrollInterval;
 
+@property (nonatomic, assign) BOOL reloadDataNeedResetIndex;
+
 /**
  current page index
  */
 @property (nonatomic, assign, readonly) NSInteger curIndex;
+@property (nonatomic, assign, readonly) TYIndexSection indexSection;
 
 // scrollView property
 @property (nonatomic, assign, readonly) CGPoint contentOffset;
@@ -145,7 +154,7 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
  scroll to item at index
  */
 - (void)scrollToItemAtIndex:(NSInteger)index animate:(BOOL)animate;
-
+- (void)scrollToItemAtIndexSection:(TYIndexSection)indexSection animate:(BOOL)animate;
 /**
  scroll to next or pre item
  */

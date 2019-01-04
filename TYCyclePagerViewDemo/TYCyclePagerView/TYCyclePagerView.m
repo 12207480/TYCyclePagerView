@@ -8,11 +8,6 @@
 
 #import "TYCyclePagerView.h"
 
-typedef struct {
-    NSInteger index;
-    NSInteger section;
-}TYIndexSection;
-
 NS_INLINE BOOL TYEqualIndexSection(TYIndexSection indexSection1,TYIndexSection indexSection2) {
     return indexSection1.index == indexSection2.index && indexSection1.section == indexSection2.section;
 }
@@ -45,7 +40,6 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 // Data
 @property (nonatomic, assign) NSInteger numberOfItems;
 
-@property (nonatomic, assign) TYIndexSection indexSection; // current index
 @property (nonatomic, assign) NSInteger dequeueSection;
 @property (nonatomic, assign) TYIndexSection beginDragIndexSection;
 @property (nonatomic, assign) NSInteger firstScrollIndex;
@@ -53,8 +47,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 @property (nonatomic, assign) BOOL needClearLayout;
 @property (nonatomic, assign) BOOL didReloadData;
 @property (nonatomic, assign) BOOL didLayout;
-
-
+@property (nonatomic, assign) BOOL needResetIndex;
 
 @end
 
@@ -84,6 +77,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)configureProperty {
+    _needResetIndex = NO;
     _didReloadData = NO;
     _didLayout = NO;
     _autoScrollInterval = 0;
@@ -124,10 +118,11 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     }
 }
 
+
 #pragma mark - timer
 
 - (void)addTimer {
-    if (_timer) {
+    if (_timer || _autoScrollInterval <= 0) {
         return;
     }
     _timer = [NSTimer timerWithTimeInterval:_autoScrollInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
@@ -240,6 +235,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 - (void)reloadData {
     _didReloadData = YES;
+    _needResetIndex = YES;
     [self setNeedClearLayout];
     [self clearLayout];
     [self updateData];
@@ -250,10 +246,18 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     [self updateLayout];
     _numberOfItems = [_dataSource numberOfItemsInPagerView:self];
     [_collectionView reloadData];
-    if (!_didLayout && !CGRectIsEmpty(self.frame) && _indexSection.index < 0) {
+    if (!_didLayout && !CGRectIsEmpty(self.collectionView.frame) && _indexSection.index < 0) {
         _didLayout = YES;
     }
-    [self resetPagerViewAtIndex:_indexSection.index < 0 && !CGRectIsEmpty(self.frame) ? 0 :_indexSection.index];
+    BOOL needResetIndex = _needResetIndex && _reloadDataNeedResetIndex;
+    _needResetIndex = NO;
+    if (needResetIndex) {
+        [self removeTimer];
+    }
+    [self resetPagerViewAtIndex:(_indexSection.index < 0 && !CGRectIsEmpty(self.collectionView.frame)) || needResetIndex ? 0 :_indexSection.index];
+    if (needResetIndex) {
+        [self addTimer];
+    }
 }
 
 - (void)scrollToNearlyIndexAtDirection:(TYPagerScrollDirection)direction animate:(BOOL)animate {
@@ -486,6 +490,9 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     UICollectionViewCell *cell = [collectionView cellForItemAtIndexPath:indexPath];
     if ([_delegate respondsToSelector:@selector(pagerView:didSelectedItemCell:atIndex:)]) {
         [_delegate pagerView:self didSelectedItemCell:cell atIndex:indexPath.item];
+    }
+    if ([_delegate respondsToSelector:@selector(pagerView:didSelectedItemCell:atIndexSection:)]) {
+        [_delegate pagerView:self didSelectedItemCell:cell atIndexSection:TYMakeIndexSection(indexPath.item, indexPath.section)];
     }
 }
 
