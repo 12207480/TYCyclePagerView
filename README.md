@@ -139,3 +139,6 @@ pod 'TYCyclePagerView'
 ### Contact
 如果你发现bug，please pull reqeust me <br>
 如果你有更好的改进，please pull reqeust me <br>
+
+### License
+TYCyclePagerView is released under the MIT license. See LICENSE for details.
