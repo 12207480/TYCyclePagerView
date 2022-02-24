@@ -1,10 +1,13 @@
 # TYCyclePagerView
+
 a simple and usefull cycle pager view ,and auto scroll banner view ,include pageControl for iOS,support Objective-C and swift.this has been used in APP.
 
 ## CocoaPods
+
 ```
 pod 'TYCyclePagerView'
 ```
+
 
 ## Requirements
 * Xcode 8 or higher
@@ -13,9 +16,11 @@ pod 'TYCyclePagerView'
 
 ### ScreenShot
 
+
 ![image](https://github.com/12207480/TYCyclePagerView/blob/master/ScreenShot/TYCyclePagerView.gif)
 
 ## API
+
 
 *  DataSource and Delegate 
 ```objc
