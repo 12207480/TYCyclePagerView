@@ -7,7 +7,7 @@ pod 'TYCyclePagerView'
 ```
 ## Carthage
 ```
-github "pinterest/PINCache"
+github "12207480/TYCyclePagerView"
 ```
 ## Requirements
 * Xcode 8 or higher
