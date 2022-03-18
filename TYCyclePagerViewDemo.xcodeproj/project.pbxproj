@@ -188,7 +188,7 @@
 				TargetAttributes = {
 					2B9C0EF01F0B2F32009BC0BD = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = ZW52Q3KXX4;
+						DevelopmentTeam = 7RMEVM26EB;
 						ProvisioningStyle = Automatic;
 					};
 					2B9C0F091F0B2F32009BC0BD = {
@@ -203,6 +203,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -386,11 +387,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = ZW52Q3KXX4;
+				DEVELOPMENT_TEAM = 7RMEVM26EB;
 				INFOPLIST_FILE = TYCyclePagerViewDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYCyclePagerViewDemo2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYCyclePagerViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -399,11 +400,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = ZW52Q3KXX4;
+				DEVELOPMENT_TEAM = 7RMEVM26EB;
 				INFOPLIST_FILE = TYCyclePagerViewDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYCyclePagerViewDemo2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tany.TYCyclePagerViewDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
