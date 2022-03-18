@@ -5,7 +5,10 @@ a simple and usefull cycle pager view ,and auto scroll banner view ,include page
 ```
 pod 'TYCyclePagerView'
 ```
-
+## Carthage
+```
+github "pinterest/PINCache"
+```
 ## Requirements
 * Xcode 8 or higher
 * iOS 7.0 or higher
