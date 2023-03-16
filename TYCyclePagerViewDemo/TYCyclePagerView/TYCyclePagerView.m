@@ -531,6 +531,10 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (velocity.x < 0 && _beginDragIndexSection.index == 0){
+        // 修复在第一个Cell往右滑，会自动滑向下一个Cell的BUG
+        return;
+    }
     if (fabs(velocity.x) < 0.35 || !TYEqualIndexSection(_beginDragIndexSection, _indexSection)) {
         targetContentOffset->x = [self caculateOffsetXAtIndexSection:_indexSection];
         return;
