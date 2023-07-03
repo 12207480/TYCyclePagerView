@@ -345,8 +345,11 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
     if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
         CGFloat bottomSpace = _pageView && !_isInfiniteLoop && _itemVerticalCenter ? (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2 : _sectionInset.bottom;
         CGFloat topSpace = _pageView && !_isInfiniteLoop && _itemVerticalCenter ? (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2 : _sectionInset.top;
-        CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
-        return UIEdgeInsetsMake(topSpace, horizontalSpace, bottomSpace, horizontalSpace);
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(topSpace, horizontalSpace, bottomSpace, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(topSpace, _sectionInset.left, bottomSpace, _sectionInset.right);
     }
     
     CGFloat leftSpace = _pageView && !_isInfiniteLoop && _itemHorizontalCenter ? (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2 : _sectionInset.left;
@@ -361,41 +364,49 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 - (UIEdgeInsets)firstSectionInset {
     
     if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
-        CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
-        return UIEdgeInsetsMake(_sectionInset.top, horizontalSpace, _itemSpacing, horizontalSpace);
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(_sectionInset.top, horizontalSpace, _itemSpacing, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(_sectionInset.top, _sectionInset.left, _itemSpacing, _sectionInset.right);
+    } else {
+        if (_itemVerticalCenter) {
+            CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
+            return UIEdgeInsetsMake(verticalSpace, _sectionInset.left, verticalSpace, _itemSpacing);
+        }
+        return UIEdgeInsetsMake(_sectionInset.top, _sectionInset.left, _sectionInset.bottom, _itemSpacing);
     }
-        
-    if (_itemVerticalCenter) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, _sectionInset.left, verticalSpace, _itemSpacing);
-    }
-    return UIEdgeInsetsMake(_sectionInset.top, _sectionInset.left, _sectionInset.bottom, _itemSpacing);
 }
 
 - (UIEdgeInsets)lastSectionInset {
     
     if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _sectionInset.right);
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(0, horizontalSpace, _sectionInset.bottom, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(0, _sectionInset.left, _sectionInset.bottom, _sectionInset.right);
+    } else {
+        if (_itemVerticalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(0, horizontalSpace, _sectionInset.bottom, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(_sectionInset.top, 0, _sectionInset.bottom, _sectionInset.right);
     }
-        
-    if (_itemVerticalCenter) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _sectionInset.right);
-    }
-    return UIEdgeInsetsMake(_sectionInset.top, 0, _sectionInset.bottom, _sectionInset.right);
 }
 
 - (UIEdgeInsets)middleSectionInset {
     
     if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _itemSpacing);
-    }
-        
-    if (_itemVerticalCenter) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _itemSpacing);
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(0, horizontalSpace, _itemSpacing, horizontalSpace);
+        }
+    } else {
+        if (_itemVerticalCenter) {
+            CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
+            return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _itemSpacing);
+        }
     }
     return _sectionInset;
 }
