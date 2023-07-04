@@ -13,7 +13,7 @@ s.license = { :type => 'MIT', :file => 'LICENSE' }
 s.author = { "tany" => "122074809@qq.com" }
 # 作者主页 s.social_media_url =""
 # 代码库最低支持的版本
-s.platform = :ios, "7.0"
+s.platform = :ios, "11.0"
 # 代码的Clone 地址 和 tag 版本
 s.source = { :git => "https://github.com/12207480/TYCyclePagerView.git", :tag => s.version.to_s }
 # 如果使用pod 需要导入哪些资源
