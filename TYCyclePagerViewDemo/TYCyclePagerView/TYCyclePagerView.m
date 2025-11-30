@@ -593,6 +593,16 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if ((_indexSection.section < 0 || needUpdateLayout) && (_numberOfItems > 0 || _didReloadData)) {
         _didLayout = YES;
         [self setNeedUpdateLayout];
+    } else if (_numberOfItems == 0 && !_didLayout) {
+        // iOS26兼容，修复iOS26布局错乱的问题：
+        //针对numberOfItems为0情况下导致布局更新失败的处理，延迟到下一个runloop再布局更新，此时numberOfItems已加载完成
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (weakSelf.numberOfItems > 0 && !weakSelf.didLayout) {
+                weakSelf.didLayout = YES;
+                [weakSelf setNeedUpdateLayout];
+            }
+        });
     }
 }
 
