@@ -142,7 +142,11 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
         return;
     }
     
-    [self scrollToNearlyIndexAtDirection:TYPagerScrollDirectionRight animate:YES];
+    BOOL isRTL = NO;
+    if (@available(iOS 9.0, *)) {
+        isRTL = UIView.appearance.semanticContentAttribute == UISemanticContentAttributeForceRightToLeft;
+    }
+    [self scrollToNearlyIndexAtDirection:(isRTL ? TYPagerScrollDirectionLeft : TYPagerScrollDirectionRight) animate:YES];
 }
 
 #pragma mark - getter
