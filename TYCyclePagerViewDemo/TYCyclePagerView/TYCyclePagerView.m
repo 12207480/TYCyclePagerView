@@ -288,8 +288,12 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (animate && [_delegate respondsToSelector:@selector(pagerViewWillBeginScrollingAnimation:)]) {
         [_delegate pagerViewWillBeginScrollingAnimation:self];
     }
-    CGFloat offset = [self caculateOffsetXAtIndexSection:indexSection];
-    [_collectionView setContentOffset:CGPointMake(offset, _collectionView.contentOffset.y) animated:animate];
+    CGFloat offset = [self caculateOffsetAtIndexSection:indexSection];
+    if (_layout.scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        [_collectionView setContentOffset:CGPointMake(_collectionView.contentOffset.x, offset) animated:animate];
+    } else {
+        [_collectionView setContentOffset:CGPointMake(offset, _collectionView.contentOffset.y) animated:animate];
+    }
 }
 
 - (void)registerClass:(Class)Class forCellWithReuseIdentifier:(NSString *)identifier {
@@ -383,47 +387,88 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     return TYMakeIndexSection(_numberOfItems-1, indexSection.section-1);
 }
 
-- (TYIndexSection)caculateIndexSectionWithOffsetX:(CGFloat)offsetX {
+- (TYIndexSection)caculateIndexSectionWithOffset:(CGPoint)offset {
     if (_numberOfItems <= 0) {
         return TYMakeIndexSection(0, 0);
     }
      UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
-    CGFloat leftEdge = _isInfiniteLoop ? _layout.sectionInset.left : _layout.onlyOneSectionInset.left;
-    CGFloat width = CGRectGetWidth(_collectionView.frame);
-    CGFloat middleOffset = offsetX + width/2;
-    CGFloat itemWidth = layout.itemSize.width + layout.minimumInteritemSpacing;
-    NSInteger curIndex = 0;
-    NSInteger curSection = 0;
-    if (middleOffset - leftEdge >= 0) {
-        NSInteger itemIndex = (middleOffset - leftEdge+layout.minimumInteritemSpacing/2)/itemWidth;
-        if (itemIndex < 0) {
-            itemIndex = 0;
-        }else if (itemIndex >= _numberOfItems*kPagerViewMaxSectionCount) {
-            itemIndex = _numberOfItems*kPagerViewMaxSectionCount-1;
+    
+    if (_layout.scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        CGFloat offsetY = offset.y;
+        CGFloat topEdge = _isInfiniteLoop ? _layout.sectionInset.top : _layout.onlyOneSectionInset.top;
+        CGFloat height = CGRectGetHeight(_collectionView.frame);
+        CGFloat middleOffset = offsetY + height/2;
+        CGFloat itemHeight = layout.itemSize.height + layout.minimumInteritemSpacing;
+        NSInteger curIndex = 0;
+        NSInteger curSection = 0;
+        if (middleOffset - topEdge >= 0) {
+            NSInteger itemIndex = (middleOffset - topEdge+layout.minimumInteritemSpacing/2)/itemHeight;
+            if (itemIndex < 0) {
+                itemIndex = 0;
+            }else if (itemIndex >= _numberOfItems*kPagerViewMaxSectionCount) {
+                itemIndex = _numberOfItems*kPagerViewMaxSectionCount-1;
+            }
+            curIndex = itemIndex%_numberOfItems;
+            curSection = itemIndex/_numberOfItems;
         }
-        curIndex = itemIndex%_numberOfItems;
-        curSection = itemIndex/_numberOfItems;
+        return TYMakeIndexSection(curIndex, curSection);
+    } else {
+        CGFloat leftEdge = _isInfiniteLoop ? _layout.sectionInset.left : _layout.onlyOneSectionInset.left;
+        CGFloat width = CGRectGetWidth(_collectionView.frame);
+        CGFloat middleOffset = offset.x + width/2;
+        CGFloat itemWidth = layout.itemSize.width + layout.minimumInteritemSpacing;
+        NSInteger curIndex = 0;
+        NSInteger curSection = 0;
+        if (middleOffset - leftEdge >= 0) {
+            NSInteger itemIndex = (middleOffset - leftEdge+layout.minimumInteritemSpacing/2)/itemWidth;
+            if (itemIndex < 0) {
+                itemIndex = 0;
+            }else if (itemIndex >= _numberOfItems*kPagerViewMaxSectionCount) {
+                itemIndex = _numberOfItems*kPagerViewMaxSectionCount-1;
+            }
+            curIndex = itemIndex%_numberOfItems;
+            curSection = itemIndex/_numberOfItems;
+        }
+        return TYMakeIndexSection(curIndex, curSection);
     }
-    return TYMakeIndexSection(curIndex, curSection);
+    
 }
 
-- (CGFloat)caculateOffsetXAtIndexSection:(TYIndexSection)indexSection{
+- (CGFloat)caculateOffsetAtIndexSection:(TYIndexSection)indexSection{
     if (_numberOfItems == 0) {
         return 0;
     }
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)_collectionView.collectionViewLayout;
     UIEdgeInsets edge = _isInfiniteLoop ? _layout.sectionInset : _layout.onlyOneSectionInset;
-    CGFloat leftEdge = edge.left;
-    CGFloat rightEdge = edge.right;
-    CGFloat width = CGRectGetWidth(_collectionView.frame);
-    CGFloat itemWidth = layout.itemSize.width + layout.minimumInteritemSpacing;
-    CGFloat offsetX = 0;
-    if (!_isInfiniteLoop && !_layout.itemHorizontalCenter && indexSection.index == _numberOfItems - 1) {
-        offsetX = leftEdge + itemWidth*(indexSection.index + indexSection.section*_numberOfItems) - (width - itemWidth) -  layout.minimumInteritemSpacing + rightEdge;
-    }else {
-        offsetX = leftEdge + itemWidth*(indexSection.index + indexSection.section*_numberOfItems) - layout.minimumInteritemSpacing/2 - (width - itemWidth)/2;
+    
+    if (_layout.scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        
+        CGFloat topEdge = edge.top;
+        CGFloat bottomEdge = edge.bottom;
+        CGFloat height = CGRectGetHeight(_collectionView.frame);
+        CGFloat itemHeight = layout.itemSize.height + layout.minimumInteritemSpacing;
+        CGFloat offsetY = 0;
+        if (!_isInfiniteLoop && indexSection.index == _numberOfItems - 1) {
+            offsetY = topEdge + itemHeight*(indexSection.index + indexSection.section*_numberOfItems) - (height - itemHeight) -  layout.minimumInteritemSpacing + bottomEdge;
+        }else {
+            offsetY = topEdge + itemHeight*(indexSection.index + indexSection.section*_numberOfItems) - layout.minimumInteritemSpacing/2 - (height - itemHeight)/2;
+        }
+        return MAX(offsetY, 0);
+        
+    } else {
+        CGFloat leftEdge = edge.left;
+        CGFloat rightEdge = edge.right;
+        CGFloat width = CGRectGetWidth(_collectionView.frame);
+        CGFloat itemWidth = layout.itemSize.width + layout.minimumInteritemSpacing;
+        CGFloat offsetX = 0;
+        if (!_isInfiniteLoop && !_layout.itemHorizontalCenter && indexSection.index == _numberOfItems - 1) {
+            offsetX = leftEdge + itemWidth*(indexSection.index + indexSection.section*_numberOfItems) - (width - itemWidth) -  layout.minimumInteritemSpacing + rightEdge;
+        }else {
+            offsetX = leftEdge + itemWidth*(indexSection.index + indexSection.section*_numberOfItems) - layout.minimumInteritemSpacing/2 - (width - itemWidth)/2;
+        }
+        return MAX(offsetX, 0);
     }
-    return MAX(offsetX, 0);
+    
 }
 
 - (void)resetPagerViewAtIndex:(NSInteger)index {
@@ -502,7 +547,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (!_didLayout) {
         return;
     }
-    TYIndexSection newIndexSection =  [self caculateIndexSectionWithOffsetX:scrollView.contentOffset.x];
+    TYIndexSection newIndexSection =  [self caculateIndexSectionWithOffset:scrollView.contentOffset];
     if (_numberOfItems <= 0 || ![self isValidIndexSection:newIndexSection]) {
         NSLog(@"inVlaidIndexSection:(%ld,%ld)!",(long)newIndexSection.index,(long)newIndexSection.section);
         return;
@@ -524,23 +569,36 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
     if (_autoScrollInterval > 0) {
         [self removeTimer];
     }
-    _beginDragIndexSection = [self caculateIndexSectionWithOffsetX:scrollView.contentOffset.x];
+    _beginDragIndexSection = [self caculateIndexSectionWithOffset:scrollView.contentOffset];
     if ([_delegate respondsToSelector:@selector(pagerViewWillBeginDragging:)]) {
         [_delegate pagerViewWillBeginDragging:self];
     }
 }
 
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
-    if (fabs(velocity.x) < 0.35 || !TYEqualIndexSection(_beginDragIndexSection, _indexSection)) {
-        targetContentOffset->x = [self caculateOffsetXAtIndexSection:_indexSection];
-        return;
+    if (_layout.scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        if (fabs(velocity.y) < 0.35 || !TYEqualIndexSection(_beginDragIndexSection, _indexSection)) {
+            targetContentOffset->y = [self caculateOffsetAtIndexSection:_indexSection];
+            return;
+        }
+        TYPagerScrollDirection direction = TYPagerScrollDirectionRight;
+        if ((scrollView.contentOffset.y < 0 && targetContentOffset->y <= 0) || (targetContentOffset->y < scrollView.contentOffset.y && scrollView.contentOffset.y < scrollView.contentSize.height - scrollView.frame.size.height)) {
+            direction = TYPagerScrollDirectionLeft;
+        }
+        TYIndexSection indexSection = [self nearlyIndexPathForIndexSection:_indexSection direction:direction];
+        targetContentOffset->y = [self caculateOffsetAtIndexSection:indexSection];
+    } else {
+        if (fabs(velocity.x) < 0.35 || !TYEqualIndexSection(_beginDragIndexSection, _indexSection)) {
+            targetContentOffset->x = [self caculateOffsetAtIndexSection:_indexSection];
+            return;
+        }
+        TYPagerScrollDirection direction = TYPagerScrollDirectionRight;
+        if ((scrollView.contentOffset.x < 0 && targetContentOffset->x <= 0) || (targetContentOffset->x < scrollView.contentOffset.x && scrollView.contentOffset.x < scrollView.contentSize.width - scrollView.frame.size.width)) {
+            direction = TYPagerScrollDirectionLeft;
+        }
+        TYIndexSection indexSection = [self nearlyIndexPathForIndexSection:_indexSection direction:direction];
+        targetContentOffset->x = [self caculateOffsetAtIndexSection:indexSection];
     }
-    TYPagerScrollDirection direction = TYPagerScrollDirectionRight;
-    if ((scrollView.contentOffset.x < 0 && targetContentOffset->x <= 0) || (targetContentOffset->x < scrollView.contentOffset.x && scrollView.contentOffset.x < scrollView.contentSize.width - scrollView.frame.size.width)) {
-        direction = TYPagerScrollDirectionLeft;
-    }
-    TYIndexSection indexSection = [self nearlyIndexPathForIndexSection:_indexSection direction:direction];
-    targetContentOffset->x = [self caculateOffsetXAtIndexSection:indexSection];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {

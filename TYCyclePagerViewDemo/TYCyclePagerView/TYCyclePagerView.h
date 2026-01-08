@@ -7,14 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
-#if __has_include(<TYCyclePagerView/TYCyclePagerView.h>)
-#import <TYCyclePagerView/TYCyclePagerTransformLayout.h>
-#else
 #import "TYCyclePagerTransformLayout.h"
-#endif
-#if __has_include(<TYCyclePagerView/TYPageControl.h>)
-#import <TYCyclePagerView/TYPageControl.h>
-#endif
+#import "TYPageControl.h"
+//#if __has_include(<TYCyclePagerView/TYCyclePagerView.h>)
+//#import <TYCyclePagerView/TYCyclePagerTransformLayout.h>
+//#else
+//#import "TYCyclePagerTransformLayout.h"
+//#endif
+//#if __has_include(<TYCyclePagerView/TYPageControl.h>)
+//#import <TYCyclePagerView/TYPageControl.h>
+//#endif
 
 NS_ASSUME_NONNULL_BEGIN
 

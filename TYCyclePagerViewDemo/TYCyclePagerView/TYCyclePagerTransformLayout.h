@@ -16,6 +16,12 @@ typedef NS_ENUM(NSUInteger, TYCyclePagerTransformLayoutType) {
     TYCyclePagerTransformLayoutCoverflow,
 };
 
+/// 滚动方向
+typedef NS_ENUM(NSUInteger, TYCyclePagerScrollDirection) {
+    TYCyclePagerScrollDirectionHorizontal,
+    TYCyclePagerScrollDirectionVertical
+};
+
 @class TYCyclePagerTransformLayout;
 @protocol TYCyclePagerTransformLayoutDelegate <NSObject>
 
@@ -43,6 +49,9 @@ typedef NS_ENUM(NSUInteger, TYCyclePagerTransformLayoutType) {
 @property (nonatomic, assign) BOOL isInfiniteLoop;  // infinte scroll
 @property (nonatomic, assign) CGFloat rateOfChange; // scale and angle change rate
 @property (nonatomic, assign) BOOL adjustSpacingWhenScroling; 
+
+/// 滚动方向，默认MFBannerViewScrollDirectionHorizontal水平滚动
+@property (nonatomic, assign) TYCyclePagerScrollDirection scrollDirection;
 
 /**
  pageView cell item vertical centering

@@ -118,6 +118,7 @@
     layout.itemSpacing = 15;
     //layout.minimumAlpha = 0.3;
     layout.itemHorizontalCenter = _horCenterSwitch.isOn;
+    layout.scrollDirection = TYCyclePagerScrollDirectionVertical;
     return layout;
 }
 

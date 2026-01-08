@@ -64,6 +64,11 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
     self.itemSize = _layout.itemSize;
     self.minimumInteritemSpacing = _layout.itemSpacing;
     self.minimumLineSpacing = _layout.itemSpacing;
+    if (_layout.scrollDirection == TYCyclePagerScrollDirectionHorizontal) {
+        self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    } else {
+        self.scrollDirection = UICollectionViewScrollDirectionVertical;
+    }
 }
 
 - (CGSize)itemSize {
@@ -87,9 +92,24 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
     return _layout.itemSpacing;
 }
 
-- (TYTransformLayoutItemDirection)directionWithCenterX:(CGFloat)centerX {
+- (TYTransformLayoutItemDirection)directionWithCenter:(CGPoint)center {
     TYTransformLayoutItemDirection direction= TYTransformLayoutItemRight;
+    
+    if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+        
+        CGFloat centerY = center.y;
+        CGFloat contentCenterY = self.collectionView.contentOffset.y + CGRectGetHeight(self.collectionView.frame)/2;
+        if (ABS(centerY - contentCenterY) < 0.5) {
+            direction = TYTransformLayoutItemCenter;
+        }else if (centerY - contentCenterY < 0) {
+            direction = TYTransformLayoutItemLeft;
+        }
+        return direction;
+        
+    }
+    
     CGFloat contentCenterX = self.collectionView.contentOffset.x + CGRectGetWidth(self.collectionView.frame)/2;
+    CGFloat centerX = center.x;
     if (ABS(centerX - contentCenterX) < 0.5) {
         direction = TYTransformLayoutItemCenter;
     }else if (centerX - contentCenterX < 0) {
@@ -167,6 +187,19 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 #pragma mark - LinearTransform
 
 - (void)applyLinearTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes {
+    
+    if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+        CGFloat collectionHeight = self.collectionView.frame.size.height;
+        if (collectionHeight <= 0) {
+            return;
+        }
+        CGFloat centetY = self.collectionView.contentOffset.y + collectionHeight/2;
+        CGFloat delta = ABS(attributes.center.y - centetY);
+        CGFloat scale = MAX(1 - delta/collectionHeight*_layout.rateOfChange, _layout.minimumScale);
+        CGFloat alpha = MAX(1 - delta/collectionHeight, _layout.minimumAlpha);
+        [self applyLinearTransformToAttributes:attributes scale:scale alpha:alpha];
+    }
+    
     CGFloat collectionViewWidth = self.collectionView.frame.size.width;
     if (collectionViewWidth <= 0) {
         return;
@@ -181,14 +214,22 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 - (void)applyLinearTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes scale:(CGFloat)scale alpha:(CGFloat)alpha {
     CGAffineTransform transform = CGAffineTransformMakeScale(scale, scale);
     if (_layout.adjustSpacingWhenScroling) {
-        TYTransformLayoutItemDirection direction = [self directionWithCenterX:attributes.center.x];
+        TYTransformLayoutItemDirection direction = [self directionWithCenter:attributes.center];
         CGFloat translate = 0;
         switch (direction) {
             case TYTransformLayoutItemLeft:
-                translate = 1.15 * attributes.size.width*(1-scale)/2;
+                if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+                    translate = 1.15 * attributes.size.height*(1-scale)/2;
+                } else {
+                    translate = 1.15 * attributes.size.width*(1-scale)/2;
+                }
                 break;
             case TYTransformLayoutItemRight:
-                translate = -1.15 * attributes.size.width*(1-scale)/2;
+                if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+                    translate = -1.15 * attributes.size.height*(1-scale)/2;
+                } else {
+                    translate = -1.15 * attributes.size.width*(1-scale)/2;
+                }
                 break;
             default:
                 // center
@@ -196,7 +237,11 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
                 alpha = 1.0;
                 break;
         }
-        transform = CGAffineTransformTranslate(transform,translate, 0);
+        if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+            transform = CGAffineTransformTranslate(transform,0, translate);
+        } else {
+            transform = CGAffineTransformTranslate(transform,translate, 0);
+        }
     }
     attributes.transform = transform;
     attributes.alpha = alpha;
@@ -205,6 +250,21 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 #pragma mark - CoverflowTransform
 
 - (void)applyCoverflowTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes{
+    
+    if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+        
+        CGFloat collectionViewHeight = self.collectionView.frame.size.height;
+        if (collectionViewHeight <= 0) {
+            return;
+        }
+        CGFloat centetY = self.collectionView.contentOffset.y + collectionViewHeight/2;
+        CGFloat delta = ABS(attributes.center.y - centetY);
+        CGFloat angle = MIN(delta/collectionViewHeight*(1-_layout.rateOfChange), _layout.maximumAngle);
+        CGFloat alpha = MAX(1 - delta/collectionViewHeight, _layout.minimumAlpha);
+        [self applyCoverflowTransformToAttributes:attributes angle:angle alpha:alpha];
+        
+    }
+    
     CGFloat collectionViewWidth = self.collectionView.frame.size.width;
     if (collectionViewWidth <= 0) {
         return;
@@ -217,16 +277,24 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 }
 
 - (void)applyCoverflowTransformToAttributes:(UICollectionViewLayoutAttributes *)attributes angle:(CGFloat)angle alpha:(CGFloat)alpha {
-    TYTransformLayoutItemDirection direction = [self directionWithCenterX:attributes.center.x];
+    TYTransformLayoutItemDirection direction = [self directionWithCenter:attributes.center];
     CATransform3D transform3D = CATransform3DIdentity;
     transform3D.m34 = -0.002;
     CGFloat translate = 0;
     switch (direction) {
         case TYTransformLayoutItemLeft:
-            translate = (1-cos(angle*1.2*M_PI))*attributes.size.width;
+            if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+                translate = (1-cos(angle*1.2*M_PI))*attributes.size.height;
+            } else {
+                translate = (1-cos(angle*1.2*M_PI))*attributes.size.width;
+            }
             break;
         case TYTransformLayoutItemRight:
-            translate = -(1-cos(angle*1.2*M_PI))*attributes.size.width;
+            if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+                translate = -(1-cos(angle*1.2*M_PI))*attributes.size.height;
+            } else {
+                translate = -(1-cos(angle*1.2*M_PI))*attributes.size.width;
+            }
             angle = -angle;
             break;
         default:
@@ -235,10 +303,18 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
             alpha = 1;
             break;
     }
-
-    transform3D = CATransform3DRotate(transform3D, M_PI*angle, 0, 1, 0);
+    
+    if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+        transform3D = CATransform3DRotate(transform3D, M_PI*angle, 1, 0, 0);
+    } else {
+        transform3D = CATransform3DRotate(transform3D, M_PI*angle, 0, 1, 0);
+    }
     if (_layout.adjustSpacingWhenScroling) {
-        transform3D = CATransform3DTranslate(transform3D, translate, 0, 0);
+        if (self.scrollDirection == UICollectionViewScrollDirectionVertical) {
+            transform3D = CATransform3DTranslate(transform3D, 0, translate, 0);
+        } else {
+            transform3D = CATransform3DTranslate(transform3D, translate, 0, 0);
+        }
     }
     attributes.transform3D = transform3D;
     attributes.alpha = alpha;
@@ -257,6 +333,7 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
         _maximumAngle = 0.2;
         _rateOfChange = 0.4;
         _adjustSpacingWhenScroling = YES;
+        _scrollDirection = TYCyclePagerScrollDirectionHorizontal;
     }
     return self;
 }
@@ -264,6 +341,17 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 #pragma mark - getter
 
 - (UIEdgeInsets)onlyOneSectionInset {
+  
+    if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        CGFloat bottomSpace = _pageView && !_isInfiniteLoop && _itemVerticalCenter ? (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2 : _sectionInset.bottom;
+        CGFloat topSpace = _pageView && !_isInfiniteLoop && _itemVerticalCenter ? (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2 : _sectionInset.top;
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(topSpace, horizontalSpace, bottomSpace, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(topSpace, _sectionInset.left, bottomSpace, _sectionInset.right);
+    }
+    
     CGFloat leftSpace = _pageView && !_isInfiniteLoop && _itemHorizontalCenter ? (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2 : _sectionInset.left;
     CGFloat rightSpace = _pageView && !_isInfiniteLoop && _itemHorizontalCenter ? (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2 : _sectionInset.right;
     if (_itemVerticalCenter) {
@@ -274,25 +362,51 @@ typedef NS_ENUM(NSUInteger, TYTransformLayoutItemDirection) {
 }
 
 - (UIEdgeInsets)firstSectionInset {
-    if (_itemVerticalCenter) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, _sectionInset.left, verticalSpace, _itemSpacing);
+    
+    if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(_sectionInset.top, horizontalSpace, _itemSpacing, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(_sectionInset.top, _sectionInset.left, _itemSpacing, _sectionInset.right);
+    } else {
+        if (_itemVerticalCenter) {
+            CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
+            return UIEdgeInsetsMake(verticalSpace, _sectionInset.left, verticalSpace, _itemSpacing);
+        }
+        return UIEdgeInsetsMake(_sectionInset.top, _sectionInset.left, _sectionInset.bottom, _itemSpacing);
     }
-    return UIEdgeInsetsMake(_sectionInset.top, _sectionInset.left, _sectionInset.bottom, _itemSpacing);
 }
 
 - (UIEdgeInsets)lastSectionInset {
-    if (_itemVerticalCenter) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _sectionInset.right);
+    
+    if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(0, horizontalSpace, _sectionInset.bottom, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(0, _sectionInset.left, _sectionInset.bottom, _sectionInset.right);
+    } else {
+        if (_itemVerticalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(0, horizontalSpace, _sectionInset.bottom, horizontalSpace);
+        }
+        return UIEdgeInsetsMake(_sectionInset.top, 0, _sectionInset.bottom, _sectionInset.right);
     }
-    return UIEdgeInsetsMake(_sectionInset.top, 0, _sectionInset.bottom, _sectionInset.right);
 }
 
 - (UIEdgeInsets)middleSectionInset {
-    if (_itemVerticalCenter) {
-        CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
-        return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _itemSpacing);
+    
+    if (_scrollDirection == TYCyclePagerScrollDirectionVertical) {
+        if (_itemHorizontalCenter) {
+            CGFloat horizontalSpace = (CGRectGetWidth(_pageView.frame) - _itemSize.width)/2;
+            return UIEdgeInsetsMake(0, horizontalSpace, _itemSpacing, horizontalSpace);
+        }
+    } else {
+        if (_itemVerticalCenter) {
+            CGFloat verticalSpace = (CGRectGetHeight(_pageView.frame) - _itemSize.height)/2;
+            return UIEdgeInsetsMake(verticalSpace, 0, verticalSpace, _itemSpacing);
+        }
     }
     return _sectionInset;
 }
