@@ -85,6 +85,12 @@ typedef NS_ENUM(NSUInteger, TYPagerScrollDirection) {
 
 @interface TYCyclePagerView : UIView
 
+/// initialize and determine RTL Adaptation
+- (instancetype)initWithFrame:(CGRect)frame isAutoRTL:(BOOL)isAutoRTL;
+
+/// is use RTL Adaptation
+@property (nonatomic, assign) BOOL isAutoRTL;
+
 // will be automatically resized to track the size of the pagerView
 @property (nonatomic, strong, nullable) UIView *backgroundView; 
 

@@ -7,6 +7,7 @@
 //
 
 #import "TYCyclePagerView.h"
+#import "TYRTLCyclePagerTransformLayout.h"
 
 NS_INLINE BOOL TYEqualIndexSection(TYIndexSection indexSection1,TYIndexSection indexSection2) {
     return indexSection1.index == indexSection2.index && indexSection1.section == indexSection2.section;
@@ -58,6 +59,15 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 
 #pragma mark - life Cycle
 
+- (instancetype)initWithFrame:(CGRect)frame isAutoRTL:(BOOL)isAutoRTL {
+    if (self = [super initWithFrame:frame]) {
+        [self configureProperty];
+        _isAutoRTL = isAutoRTL;
+        [self addCollectionView];
+    }
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self configureProperty];
@@ -77,6 +87,7 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)configureProperty {
+    _isAutoRTL = NO;
     _needResetIndex = NO;
     _didReloadData = NO;
     _didLayout = NO;
@@ -90,7 +101,12 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 - (void)addCollectionView {
-    TYCyclePagerTransformLayout *layout = [[TYCyclePagerTransformLayout alloc]init];
+    TYCyclePagerTransformLayout *layout;
+    if (self.isAutoRTL) {
+        layout = [[TYRTLCyclePagerTransformLayout alloc] init];
+    } else {
+        layout = [[TYCyclePagerTransformLayout alloc] init];
+    }
     UICollectionView *collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
     layout.delegate = _delegateFlags.applyTransformToAttributes ? self : nil;;
     collectionView.backgroundColor = [UIColor clearColor];
@@ -201,6 +217,26 @@ NS_INLINE TYIndexSection TYMakeIndexSection(NSInteger index, NSInteger section) 
 }
 
 #pragma mark - setter
+
+- (void)setIsAutoRTL:(BOOL)isAutoRTL {
+    if (_isAutoRTL == isAutoRTL) return;
+    _isAutoRTL = isAutoRTL;
+    
+    TYCyclePagerTransformLayout *newLayout;
+    if (isAutoRTL) {
+        newLayout = [[TYRTLCyclePagerTransformLayout alloc] init];
+    } else {
+        newLayout = [[TYCyclePagerTransformLayout alloc] init];
+    }
+    
+    TYCyclePagerTransformLayout *oldLayout = (TYCyclePagerTransformLayout *)self.collectionView.collectionViewLayout;
+    oldLayout.delegate = nil;
+    
+    newLayout.layout = oldLayout.layout;
+    
+    self.collectionView.collectionViewLayout = newLayout;
+    newLayout.delegate = _delegateFlags.applyTransformToAttributes ? self : nil;
+}
 
 - (void)setBackgroundView:(UIView *)backgroundView {
     [_collectionView setBackgroundView:backgroundView];
